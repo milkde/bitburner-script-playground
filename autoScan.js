@@ -5,6 +5,7 @@ export async function main(ns) {
 	ns.disableLog('getServerRequiredHackingLevel');
 	ns.disableLog('getHackingLevel');
 	ns.disableLog('hasRootAccess');
+	ns.clearLog();
 
 	let scannedAndReady = [];
 	let newServers = ns.scan(ns.getHostname());
