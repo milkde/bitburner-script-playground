@@ -20,13 +20,13 @@ export async function calculateThreats(ns, host, target, mode) {
 		maxMon: () => ns.getServerMaxMoney(target),
 		curMon: () => ns.getServerMoneyAvailable(target),
 		maxThr: {
-			maxWeak: Math.floor((hostInfo.rdyRam() / scriptStats.usgRam.scriptWeaken)),
-			maxGrow: Math.floor((hostInfo.rdyRam() / scriptStats.usgRam.scriptGrow)),
-			maxHack: Math.floor((hostInfo.rdyRam() / scriptStats.usgRam.scriptHack))
+			maxWeak: Math.floor(hostInfo.rdyRam() / scriptStats.usgRam.scriptWeaken),
+			maxGrow: Math.floor(hostInfo.rdyRam() / scriptStats.usgRam.scriptGrow),
+			maxHack: Math.floor(hostInfo.rdyRam() / scriptStats.usgRam.scriptHack)
 		}
 	}
 
-	let calculatedthreats = 1;
+	let calculatedThreats = 1;
 
 	switch (mode) {
 		case 'weaken':
@@ -35,16 +35,16 @@ export async function calculateThreats(ns, host, target, mode) {
 			// weakenAnalyze: Returns the security decrease that would occur 
 			// 				  if a weaken with this many threads happened.
 
-			while (ns.weakenAnalyze(calculatedthreats) <= serverInfo.curSec() - serverInfo.minSec()) {
-				calculatedthreats++;
+			while (ns.weakenAnalyze(calculatedThreats) <= serverInfo.curSec() - serverInfo.minSec()) {
+				calculatedThreats++;
 			}
 
 			// If the amount of threats exceed the servers capabilities
 			// then reduce them until the script can be run
-			if (calculatedthreats >= serverInfo.maxThr.maxWeak) {
+			if (calculatedThreats >= serverInfo.maxThr.maxWeak) {
 				calculatedThreats = serverInfo.maxThr.maxWeak;
 			}
-			return calculatedthreats
+			return calculatedThreats
 
 		case 'grow':
 			//For example, if you want to determine how many grow calls you need to double the amount of money on foodnstuff, you would use:
@@ -55,7 +55,7 @@ export async function calculateThreats(ns, host, target, mode) {
 
 			// If the amount of threats exceed the servers capabilities
 			// then reduce them until the script can be run
-			if (calculatedthreats >= serverInfo.maxThr.maxGrow) {
+			if (calculatedThreats >= serverInfo.maxThr.maxGrow) {
 				calculatedThreats = serverInfo.maxThr.maxGrow;
 			}
 			return calculatedThreats + 1
@@ -76,7 +76,10 @@ export async function calculateThreats(ns, host, target, mode) {
 			calculatedThreats = Math.floor((serverInfo.curMon() / (serverInfo.curMon() * moneyPerThreat) * 0.85));
 			if (calculatedThreats > serverInfo.maxThr.maxHack) {
 				calculatedThreats = serverInfo.maxThr.maxHack;
+				ns.print(serverInfo.maxThr.maxHack + '<--------CALCULATED THREATS HERE IN IF!!!!')
 			}
+
+			ns.print(calculatedThreats + '<--------CALCULATED THREATS HERE!!!!' + hostInfo.rdyRam());
 			return calculatedThreats + 1
 	}
 }
