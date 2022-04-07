@@ -76,10 +76,7 @@ export async function calculateThreats(ns, host, target, mode) {
 			calculatedThreats = Math.floor((serverInfo.curMon() / (serverInfo.curMon() * moneyPerThreat) * 0.85));
 			if (calculatedThreats > serverInfo.maxThr.maxHack) {
 				calculatedThreats = serverInfo.maxThr.maxHack;
-				ns.print(serverInfo.maxThr.maxHack + '<--------CALCULATED THREATS HERE IN IF!!!!')
 			}
-
-			ns.print(calculatedThreats + '<--------CALCULATED THREATS HERE!!!!' + hostInfo.rdyRam());
 			return calculatedThreats + 1
 	}
 }
