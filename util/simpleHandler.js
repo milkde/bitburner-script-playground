@@ -4,18 +4,18 @@ import { calculateThreats } from 'libs/calculateThreats.js';
 
 /** @param {NS} ns **/
 export async function main(ns) {
-	ns.disableLog('getServerSecurityLevel'); ns.disableLog('getServerMinSecurityLevel');
+/*	ns.disableLog('getServerSecurityLevel'); ns.disableLog('getServerMinSecurityLevel');
 	ns.disableLog('getServerMoneyAvailable'); ns.disableLog('getServerMaxMoney');
 	ns.disableLog('sleep'); ns.disableLog('getServerUsedRam');
 	ns.disableLog('getScriptRam'); ns.disableLog('isRunning');
 	ns.disableLog('hackAnalyze'); ns.disableLog('exec');
 	ns.disableLog('getServerMaxRam');
-	ns.clearLog();
+	ns.clearLog();*/
 
 	const symbols = [/*'█',*/'■', '·', '[', ']'];
 	const server = ns.args[0];
 	const host = ns.getHostname();
-	const fps = 50;
+	const fps = 30;
 	const barRes = 40;
 	const version = '0.3.42';
 
@@ -91,7 +91,7 @@ export async function main(ns) {
 
 						if (!ns.isRunning('weaken.js', host, server)) {
 							
-							threats = await calculateThreats(ns, host, server, serverInfo.mode[0]);
+							threats = (await calculateThreats(ns, host, server, serverInfo.mode[0])).toFixed(0);
 							ns.exec('weaken.js', host, Math.abs(threats), server);
 							await ns.sleep(fps);
 						}
@@ -105,10 +105,11 @@ export async function main(ns) {
 					weakenCounter = 0;
 				}
 				if (!ns.isRunning('grow.js', host, server)) {
-					threats = await calculateThreats(ns, host, server, serverInfo.mode[1]);
+					threats = (await calculateThreats(ns, host, server, serverInfo.mode[1])).toFixed(0);
 					if (threats <= 0) { break; }
 					ns.exec('grow.js', host, Math.abs(threats), server);
 					weakenCounter++
+					await ns.sleep(fps);
 				}
 				while (ns.isRunning('grow.js', host, server)) {
 					serverInfo.curStg = 'grow.js';
@@ -124,8 +125,9 @@ export async function main(ns) {
 
 			while (serverInfo.curSec() > serverInfo.minSec()) {
 				if (!ns.isRunning('weaken.js', host, server)) {
-					threats = await calculateThreats(ns, host, server, serverInfo.mode[0]);
+					threats = (await calculateThreats(ns, host, server, serverInfo.mode[0])).toFixed(0);
 					ns.exec('weaken.js', host, Math.abs(threats), server);
+					await ns.sleep(fps);
 				}
 				while (ns.isRunning('weaken.js', host, server)) {
 					serverInfo.curStg = 'weaken.js';
@@ -137,8 +139,9 @@ export async function main(ns) {
 			}
 
 			if (!ns.isRunning('hack.js', host, server)) {
-				threats = await calculateThreats(ns, host, server, serverInfo.mode[2]);
+				threats = (await calculateThreats(ns, host, server, serverInfo.mode[2])).toFixed(0) - 1;
 				ns.exec('hack.js', host, Math.abs(threats), server);
+				await ns.sleep(fps);
 			}
 
 			while (ns.isRunning('hack.js', host, server)) {
