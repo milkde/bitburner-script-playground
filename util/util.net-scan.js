@@ -1,3 +1,6 @@
+import { filterSubstring } from '/libs/filterSubstring.js';
+import { filterDuplicates } from '/libs/filterDuplicates.js';
+
 /** @param {NS} ns **/
 export async function main(ns) {
 	ns.disableLog('sleep');
@@ -12,40 +15,6 @@ export async function main(ns) {
 	let helperArray = [];
 	let counter = 10;
 
-	// This is optional. It's here to filter out the players webservers
-	async function filterSubstring(serverList, substring) {
-		const filteredArray = [];
-
-		for (let i in serverList) {
-			if (!serverList[i].includes(substring)) {
-				filteredArray.push(serverList[i]);
-			}
-		} return filteredArray // the original values + the unique ones
-	}
-
-	async function filterDuplicates(serverListA, serverListB) {
-		const filteredArray = [];
-		let isDuplicate = false;
-		for (let i in serverListB) {
-			isDuplicate = false;
-
-			for (let j in serverListA) {
-				if (serverListB[i] == serverListA[j]) {
-					isDuplicate = true;
-				}
-			}
-			if (isDuplicate != true) {
-				filteredArray.push(serverListB[i])
-			}
-		} return filteredArray // only missing values
-	}
-
-	async function mergeArrays(arrayA, arrayB) {
-		for (let i in arrayB) {
-			arrayA.push(arrayB[i]);
-		} return arrayA
-	}
-
 	async function scanHost(host) {
 		const hostScanArray = ns.scan(host);
 		return hostScanArray
@@ -55,7 +24,7 @@ export async function main(ns) {
 		counter--
 		for (let i in newServers) {
 			let array2 = [];
-	
+
 			array2 = array2.concat(await scanHost(newServers[i]));
 			array2 = await filterDuplicates(scannedAndReady, array2);
 
@@ -68,7 +37,7 @@ export async function main(ns) {
 			if (!ns.hasRootAccess(newServers[i]) && ns.getHackingLevel() > ns.getServerRequiredHackingLevel(newServers[i])) {
 				ns.exec('/scripts/nuke.js', 'home', 1, newServers[i]);
 				ns.print('Rooted a new server: ' + newServers[i]);
-			}
+			} else { ns.print(newServers[i] + ' is already rooted.') }
 		}
 		newServers = helperArray;
 		helperArray = [];
@@ -77,6 +46,7 @@ export async function main(ns) {
 			scannedAndReady = await filterSubstring(scannedAndReady, 'webmon');
 			scannedAndReady = await filterSubstring(scannedAndReady, 'home');
 			await ns.write('/db/spiderDB.txt', scannedAndReady, 'w');
+			ns.print('New list written into spiderDB.txt: \n' + scannedAndReady);
 			counter = 10;
 		}
 		await ns.sleep(50);
