@@ -28,10 +28,6 @@ export async function calculateThreats(ns, host, target, mode) {
 
 	let calculatedthreats = 1;
 
-
-
-
-
 	switch (mode) {
 		case 'weaken':
 			// Calculate how many threats it takes to weaken down the difference of
@@ -51,12 +47,11 @@ export async function calculateThreats(ns, host, target, mode) {
 			return calculatedthreats
 
 		case 'grow':
-
 			//For example, if you want to determine how many grow calls you need to double the amount of money on foodnstuff, you would use:
 			//let growTimes = ns.growthAnalyze("foodnstuff", 2);
 			//If this returns 100, then this means you need to call grow 100 times in order to double the money (or once with 100 threads).
 			let growthUntilMax = serverInfo.maxMon() / serverInfo.curMon();
-			let calculatedThreats = ns.growthAnalyze(target, Math.ceil(growthUntilMax));
+			calculatedThreats = ns.growthAnalyze(target, Math.ceil(growthUntilMax));
 
 			// If the amount of threats exceed the servers capabilities
 			// then reduce them until the script can be run
@@ -77,7 +72,7 @@ export async function calculateThreats(ns, host, target, mode) {
 			// You would gain 10$ per threat. If you divide 1000$ / 10$
 			// then you will get the amount of threats("times") to fully
 			// deplete it. Multiplied by 0.85 to prevent depleting servers
-			// (works not with higher hacking levels and arguments)
+			// (works not with higher hacking levels and arguments)			
 			calculatedThreats = Math.floor((serverInfo.curMon() / (serverInfo.curMon() * moneyPerThreat) * 0.85));
 			if (calculatedThreats > serverInfo.maxThr.maxHack) {
 				calculatedThreats = serverInfo.maxThr.maxHack;
