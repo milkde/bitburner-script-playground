@@ -4,13 +4,13 @@ import { calculateThreats } from 'libs/calculateThreats.js';
 
 /** @param {NS} ns **/
 export async function main(ns) {
-/*	ns.disableLog('getServerSecurityLevel'); ns.disableLog('getServerMinSecurityLevel');
+	ns.disableLog('getServerSecurityLevel'); ns.disableLog('getServerMinSecurityLevel');
 	ns.disableLog('getServerMoneyAvailable'); ns.disableLog('getServerMaxMoney');
 	ns.disableLog('sleep'); ns.disableLog('getServerUsedRam');
 	ns.disableLog('getScriptRam'); ns.disableLog('isRunning');
 	ns.disableLog('hackAnalyze'); ns.disableLog('exec');
 	ns.disableLog('getServerMaxRam');
-	ns.clearLog();*/
+	ns.clearLog();
 
 	const symbols = [/*'█',*/'■', '·', '[', ']'];
 	const server = ns.args[0];
