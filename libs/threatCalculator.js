@@ -3,7 +3,7 @@ export async function calculateThreats(ns, host, target, mode) {
 	const hostInfo = {
 		maxRam: () => ns.getServerMaxRam(host),
 		useRam: () => ns.getServerUsedRam(host),
-		rdyRam: () => ns.getServerMaxRam(host) - ns.getServerUsedRam(host)
+		rdyRam: () => (ns.getServerMaxRam(host) - ns.getServerUsedRam(host))
 	}
 
 	const scriptStats = {
@@ -58,7 +58,7 @@ export async function calculateThreats(ns, host, target, mode) {
 			if (calculatedThreats >= serverInfo.maxThr.maxGrow) {
 				calculatedThreats = serverInfo.maxThr.maxGrow;
 			}
-			return calculatedThreats + 1
+			return calculatedThreats
 
 		case 'hack':
 			// For example, assume the following returns 0.01:
